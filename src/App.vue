@@ -2,16 +2,16 @@
   <div>
     <!--    <div style="margin-top: 1vh;"></div>-->
     <div class="content" style="width: fit-content; " @click="setPoint($event)">
-      <img src="@/assets/images/building.jpg" alt="" ref="img">
+      <img src="@/assets/images/building.jpg" alt="" ref="img" @load="imgWidth = $refs.img.width">
       <div
           class="circle"
           v-for="(point, idx) in points"
           :key="idx"
           :style="`
-          width: calc(10px / ${(point.installationWidth / getWidthImg)});
-          height: calc(10px / ${(point.installationWidth / getWidthImg)});
-          top: ${(point.y - 4.25) / (point.installationWidth / getWidthImg)}px;
-          left: ${(point.x - 4.25) / (point.installationWidth / getWidthImg)}px;
+          width: calc(10px / ${(point.installationWidth / imgWidth)});
+          height: calc(10px / ${(point.installationWidth / imgWidth)});
+          top: ${(point.y - 4.25) / (point.installationWidth / imgWidth)}px;
+          left: ${(point.x - 4.25) / (point.installationWidth / imgWidth)}px;
           `"
       />
     </div>
@@ -38,7 +38,7 @@ export default {
         "y": 153,
         "installationWidth": 843
       }, {"x": 304, "y": 181, "installationWidth": 843}],
-      imgWidth: 843,
+      imgWidth: 0,
     }
   },
   methods: {
@@ -56,13 +56,9 @@ export default {
     get1vw() {
       return window.innerWidth / 100
     },
-
-    getWidthImg() {
-      return 419
-    }
   },
   mounted() {
-    console.log(this.$refs.img)
+    console.log()
   }
 }
 </script>

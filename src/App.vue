@@ -1,26 +1,97 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <!--    <div style="margin-top: 1vh;"></div>-->
+    <div class="content" style="width: fit-content; " @click="setPoint($event)">
+      <img src="@/assets/images/building.jpg" alt="" ref="img">
+      <div
+          class="circle"
+          v-for="(point, idx) in points"
+          :key="idx"
+          :style="`
+          width: calc(10px / ${(point.installationWidth / getWidthImg)});
+          height: calc(10px / ${(point.installationWidth / getWidthImg)});
+          top: ${(point.y - 4.25) / (point.installationWidth / getWidthImg)}px;
+          left: ${(point.x - 4.25) / (point.installationWidth / getWidthImg)}px;
+          `"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  components: {},
+  data() {
+    return {
+      points: [{"x": 252, "y": 207, "installationWidth": 843}, {"x": 484, "y": 58, "installationWidth": 843}, {
+        "x": 651,
+        "y": 175,
+        "installationWidth": 843
+      }, {"x": 593, "y": 135, "installationWidth": 843}, {"x": 553, "y": 115, "installationWidth": 843}, {
+        "x": 609,
+        "y": 156,
+        "installationWidth": 843
+      }, {"x": 370, "y": 111, "installationWidth": 843}, {"x": 359, "y": 125, "installationWidth": 843}, {
+        "x": 311,
+        "y": 153,
+        "installationWidth": 843
+      }, {"x": 304, "y": 181, "installationWidth": 843}],
+      imgWidth: 843,
+    }
+  },
+  methods: {
+    setPoint(e) {
+      console.log('X', e.layerX)
+      console.log('Y', e.layerY)
+      console.log(e)
+      this.points.push({x: e.layerX, y: e.layerY, installationWidth: this.$refs.img.width})
+    }
+  },
+  computed: {
+    get1vh() {
+      return window.innerHeight / 100
+    },
+    get1vw() {
+      return window.innerWidth / 100
+    },
+
+    getWidthImg() {
+      return 419
+    }
+  },
+  mounted() {
+    console.log(this.$refs.img)
   }
 }
 </script>
 
 <style>
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+}
+
+.content {
+  height: 100%;
+  position: relative;
+}
+
+.content img {
+  max-width: 100%;
+  max-height: 100%;
+  margin-right: 15px;
+}
+
+.circle {
+  background: #000000;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
 }
 </style>

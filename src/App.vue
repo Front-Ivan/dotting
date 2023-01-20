@@ -14,7 +14,7 @@
           class="circle"
           data-circle
           v-for="(point, idx) in points"
-          ref="circle"
+          :ref="`circle`"
           :key="idx"
           :style="`
           width: calc(10px / ${(point.installationWidth / imgWidth)});
@@ -27,6 +27,7 @@
       />
     </div>
   </div>
+  <div @click="activeCircle = false">Сохранить</div>
 </template>
 
 <script>
@@ -51,6 +52,8 @@ export default {
       imgWidth: 0,
       clicked: false,
       selectedPoint: null,
+
+      activeCircle: false,
     }
   },
   methods: {
@@ -58,7 +61,10 @@ export default {
       console.log('X', e.layerX)
       console.log('Y', e.layerY)
       console.log(e)
-      this.points.push({x: this.$refs.img.width - 10, y: this.$refs.img.height - 10, installationWidth: this.$refs.img.width})
+      if (!this.activeCircle) {
+        this.activeCircle = true
+        this.points.push({x: this.$refs.img.width - this.circleSize, y: this.$refs.img.height - this.circleSize, installationWidth: this.$refs.img.width})
+      }
     },
     dragnDropStart(e, idx) {
       // console.log(e)
@@ -67,11 +73,11 @@ export default {
     },
     dragnDropInProcess(e) {
       if (this.clicked) {
-        const widthHeight = e.target.offsetWidth
-        if (this.$refs.img.width > Math.abs(this.points[this.selectedPoint].x)) {
+
+        if (this.$refs.img.width - (this.circleSize / 2) > this.points[this.selectedPoint].x) {
           this.points[this.selectedPoint].x = this.points[this.selectedPoint].x + e.movementX
         }
-        if (this.$refs.img.height > Math.abs(this.points[this.selectedPoint].y)) {
+        if (this.$refs.img.height - (this.circleSize / 2) > this.points[this.selectedPoint].y) {
           this.points[this.selectedPoint].y = this.points[this.selectedPoint].y + e.movementY
         }
         // console.log('point', this.points[this.selectedPoint])
@@ -88,20 +94,13 @@ export default {
     }
   },
   computed: {
-    get1vh() {
-      return window.innerHeight / 100
-    },
-    get1vw() {
-      return window.innerWidth / 100
-    },
+    circleSize() {
+      return this.$refs.circle[0].offsetWidth
+    }
   },
   watch: {
 
   },
-  mounted() {
-  },
-  updated() {
-  }
 }
 </script>
 
